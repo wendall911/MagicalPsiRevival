@@ -1,0 +1,242 @@
+plugins {
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '1.71.8'
+    id 'me.modmuss50.mod-publish-plugin' version '0.7.3'
+}
+
+repositories {
+    maven {
+        // location of the maven that hosts Mantle and JEI files
+        name = 'Progwml6 maven'
+        url = 'https://dvs1.progwml6.com/files/maven'
+    }
+    maven { // TOP
+        name 'McJty maven'
+        url "https://maven.k-4u.nl"
+    }
+    flatDir {
+        dirs 'libs'
+    }
+    maven {
+        name = "Curse Maven"
+        url = "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        // Patchouli && Provider
+        name = "Blame Jared"
+        url = "https://maven.blamejared.com"
+    }
+}
+
+group = 'com.github.wendall911.magicalpsirevival'
+version = "${minecraft_version}-${mod_version}"
+archivesBaseName = "${mod_name}"
+def mcversion = "${minecraft_version}"
+def modid = "${modid}"
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '17'
+
+minecraft {
+    mappings channel: "${mappings_channel}", version: "${mappings_version}-${minecraft_version}"
+
+    runs {
+        client {
+            workingDirectory project.file("run").canonicalPath
+            arg "-mixin.config=${modid}.mixins.json"
+            property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
+            mods {
+                magicalpsirevival {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            arg "-mixin.config=${modid}.mixins.json"
+            property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
+            mods {
+                magicalpsirevival {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            arg "-mixin.config=${modid}.mixins.json"
+            property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
+            args '--mod', "${modid}",
+                    '--all',
+                    '--output', file('src/generated/resources/'),
+                    '--existing', file('src/main/resources/'),
+                    '--existing', file('src/generated/resources')
+
+            mods {
+                magicalpsirevival {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, "${modid}.refmap.json"
+
+    config "${modid}.mixins.json"
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+
+    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+
+    runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${minecraft_version}-${probe_version}") {
+        transitive = false
+    }
+
+    implementation fg.deobf("curse.maven:cyanide-541676:${cyanide_version}")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}-FORGE")
+    implementation fg.deobf("vazkii.psi:Psi:${psi_version}")
+}
+
+def commonManifest = {
+    attributes 'FMLAT': 'magicalpsirevival_at.cfg'
+}
+
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": mod_name,
+            "Specification-Vendor": "${mod_author}",
+            "Specification-Version": "${archiveVersion}",
+            "Implementation-Title": "${mod_name}",
+            "Implementation-Version": "${archiveVersion}",
+            "Implementation-Vendor" :"${mod_author}",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs": "${modid}.mixins.json"
+        ])
+    }
+}
+
+mixin {
+    add sourceSets.main, "${modid}.refmap.json"
+}
+
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta', '*.mixins.json']
+def replaceProperties = [ 'version': version,
+    'issue_tracker': issue_tracker, 'license': license, 'modid': modid, 'display_name': display_name,
+    'description': description, 'display_url': display_url, 'update_url': update_url, 'authors': authors,
+    'credits': credits, 'logo_file': logo_file, 'minecraft_version_range': minecraft_version_range,
+    'forge_version_range': forge_version_range, "loader_version_range": loader_version_range
+]
+
+processResources {
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
+    inputs.properties replaceProperties
+    exclude '.cache'
+    replaceProperties.put 'project', project
+
+    filesMatching(resourceTargets) {
+        expand replaceProperties
+    }
+}
+
+jar.finalizedBy('reobfJar', 'signJar')
+
+def updates = tasks.register("generateUpdates", Copy) {
+    it.outputs.upToDateWhen {
+        false
+    }
+
+    it.from("./files/templates/") {
+        include 'updates.json'
+        expand 'version': version, 'minecraft_version': minecraft_version
+    }
+
+    it.into 'files/'
+}
+
+def changelogFile = project(":").projectDir.toString() + '/build/libs/' + project.getName() + '-' + version + '-changelog.txt'
+def publishFile = project(":").projectDir.toString() + "/build/libs/${archivesBaseName}-${version}.jar"
+
+publishMods {
+    file = file(publishFile)
+    if (file(changelogFile).exists()) {
+        changelog = file(changelogFile).text
+    }
+    type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
+    modLoaders.addAll(['neoforge', 'forge'])
+
+    if (project.hasProperty('mprcurseApiKey')) {
+        curseforge {
+            accessToken = project.securseApiKey
+            projectId = project.securseId
+            javaVersions.add(JavaVersion.toVersion("${java_version}"))
+            clientRequired = true
+            serverRequired = true
+            minecraftVersions.addAll("${release_versions}".split(','))
+            required('psi')
+        }
+    }
+    if (project.hasProperty('mprModrinthId')) {
+        modrinth {
+            accessToken = project.modrinthKey
+            projectId = project.seModrinthId
+            minecraftVersions.addAll("${release_versions}".split(','))
+            required('psi')
+        }
+    }
+}
+
+task changelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
+    file = new File(changelogFile);
+    templateContent = file('files/templates/changelog.mustache').getText('UTF-8');
+    fromRepo = file("$projectDir");
+    toRef = "HEAD";
+    fromRef = "${minecraft_version}-${last_mod_version}";
+}
+
+tasks.build.dependsOn('changelog', 'generateUpdates')
+
+// Jar Signing
+import net.minecraftforge.gradle.common.tasks.SignJar
+
+task signJar(type: SignJar, dependsOn: jar) {
+    dependsOn 'reobfJar'
+
+    // Skip the task if our secret data isn't available
+    onlyIf {
+        project.hasProperty('keyStore')
+    }
+
+    keyStore = project.keyStore // This needs to be a path to the keystore file
+    alias = project.keyStoreAlias
+    storePass = project.keyStorePass
+    keyPass = project.keyStoreKeyPass
+    inputFile = jar.archiveFile
+    outputFile = jar.archiveFile
+}

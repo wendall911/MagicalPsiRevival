@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+issueTrackerURL="${issue_tracker}"
+license="${license}"
+
+[[mods]]
+  modId="${modid}"
+  displayName="${display_name}"
+  description="${description}"
+  version="${version}"
+  displayURL="${display_url}"
+  updateJSONURL="${update_url}"
+  authors="${authors}"
+  credits="${credits}"
+  itemIcon="psi:needs_item"
+  logoFile="${logo_file}"
+
+[[dependencies.magicalpsirevival]]
+    modId="forge"
+    mandatory=true
+    versionRange="${forge_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.magicalpsirevival]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.magicalpsirevival]]
+    modId="psi"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
