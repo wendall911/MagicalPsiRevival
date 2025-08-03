@@ -1,5 +1,5 @@
-# Magical Psi Revival[![Project](http://cf.way2muchnoise.eu/full_XXXXXX_downloads.svg)](https://minecraft.curseforge.com/projects/XXXXXX)
-![Minecraft](http://cf.way2muchnoise.eu/versions/For%20MC_XXXXXX_all.svg)
+# Magical Psi Revival[![Project](http://cf.way2muchnoise.eu/full_1320084_downloads.svg)](https://minecraft.curseforge.com/projects/1320084)
+![Minecraft](http://cf.way2muchnoise.eu/versions/For%20MC_1320084_all.svg)
 ![Forge](https://img.shields.io/badge/Forge-40.0.+-green.svg?longCache=true&style=flat)
 ![Psi License](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat)
 
@@ -16,18 +16,18 @@
 ![](https://i.ibb.co/bJzpp5j/magipsi-armor.png)
 
 ## Credits
-* TheIllusiveC$ for keeping the original mod alive through 1.19.
+* TheIllusiveC4 for keeping the original mod alive through 1.19.
 * Wiiv for the assets from the original [Magical Psi](https://www.curseforge.com/minecraft/mc-mods/magical-psi)
 * Saiko-Chan for all additional assets
 * Vazkii for creating [Psi](https://www.curseforge.com/minecraft/mc-mods/psi)
 
 Download latest (1.20.1):
 
-[![Download](https://curse.nikky.moe/api/img/XXXXXX?logo)](https://curse.nikky.moe/api/url/XXXXXX)
+[![Download](https://curse.nikky.moe/api/img/1320084?logo)](https://curse.nikky.moe/api/url/1320084)
 
 All Downloads:
 
-[![Files](https://curse.nikky.moe/api/img/XXXXXX/files?logo)](https://minecraft.curseforge.com/projects/XXXXXX/files)
+[![Files](https://curse.nikky.moe/api/img/1320084/files?logo)](https://minecraft.curseforge.com/projects/1320084/files)
 
 ## Links of Interest
 
