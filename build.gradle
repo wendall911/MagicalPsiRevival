@@ -49,10 +49,7 @@ minecraft {
     runs {
         client {
             workingDirectory project.file("run").canonicalPath
-            arg "-mixin.config=${modid}.mixins.json"
             property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
                 magicalpsirevival {
@@ -63,10 +60,7 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
-            arg "-mixin.config=${modid}.mixins.json"
             property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
                 magicalpsirevival {
@@ -77,10 +71,7 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
-            arg "-mixin.config=${modid}.mixins.json"
             property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             args '--mod', "${modid}",
                     '--all',
@@ -95,12 +86,6 @@ minecraft {
             }
         }
     }
-}
-
-mixin {
-    add sourceSets.main, "${modid}.refmap.json"
-
-    config "${modid}.mixins.json"
 }
 
 sourceSets.main.resources {
@@ -136,17 +121,12 @@ jar {
             "Implementation-Title": "${mod_name}",
             "Implementation-Version": "${archiveVersion}",
             "Implementation-Vendor" :"${mod_author}",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs": "${modid}.mixins.json"
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
 
-mixin {
-    add sourceSets.main, "${modid}.refmap.json"
-}
-
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta', '*.mixins.json']
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
 def replaceProperties = [ 'version': version,
     'issue_tracker': issue_tracker, 'license': license, 'modid': modid, 'display_name': display_name,
     'description': description, 'display_url': display_url, 'update_url': update_url, 'authors': authors,
