@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "W": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "pattern": [
+    "I  ",
+    "IWI",
+    "  I"
+  ],
+  "result": {
+    "item": "psi:cad_assembly_iron"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "tag": "psi:psidust"
+    },
+    "W": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "pattern": [
+    "DW",
+    "W "
+  ],
+  "result": {
+    "item": "psi:cad_socket_basic"
+  },
+  "show_notification": true
+}

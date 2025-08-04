@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "minecraft:buttons"
+    },
+    "I": {
+      "tag": "forge:ingots/gold"
+    },
+    "P": {
+      "tag": "psi:psidust"
+    }
+  },
+  "pattern": [
+    " B ",
+    "IPI"
+  ],
+  "result": {
+    "item": "psi:detonator"
+  },
+  "show_notification": true
+}

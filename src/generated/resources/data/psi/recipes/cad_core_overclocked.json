@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "tag": "forge:dusts/redstone"
+    },
+    "I": {
+      "tag": "forge:ingots/gold"
+    },
+    "P": {
+      "tag": "forge:ingots/psimetal"
+    }
+  },
+  "pattern": [
+    "I  ",
+    "DPD",
+    "  I"
+  ],
+  "result": {
+    "item": "psi:cad_core_overclocked"
+  },
+  "show_notification": true
+}

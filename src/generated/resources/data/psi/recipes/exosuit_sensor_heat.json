@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "forge:ingots/psimetal"
+    },
+    "M": {
+      "item": "minecraft:fire_charge"
+    },
+    "R": {
+      "tag": "forge:ingots/gold"
+    }
+  },
+  "pattern": [
+    " I ",
+    "IMR",
+    " R "
+  ],
+  "result": {
+    "item": "psi:exosuit_sensor_heat"
+  },
+  "show_notification": true
+}

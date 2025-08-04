@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "forge:ingots/psimetal"
+    },
+    "M": {
+      "item": "minecraft:glistering_melon_slice"
+    },
+    "R": {
+      "tag": "forge:ingots/gold"
+    }
+  },
+  "pattern": [
+    " I ",
+    "IMR",
+    " R "
+  ],
+  "result": {
+    "item": "psi:exosuit_sensor_stress"
+  },
+  "show_notification": true
+}

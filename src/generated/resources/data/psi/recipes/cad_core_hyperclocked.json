@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "tag": "forge:dusts/redstone"
+    },
+    "I": {
+      "tag": "forge:ingots/gold"
+    },
+    "P": {
+      "tag": "forge:gems/psigem"
+    }
+  },
+  "pattern": [
+    "I  ",
+    "DPD",
+    "  I"
+  ],
+  "result": {
+    "item": "psi:cad_core_hyperclocked"
+  },
+  "show_notification": true
+}
