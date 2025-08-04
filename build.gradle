@@ -173,13 +173,13 @@ publishMods {
 
     if (project.hasProperty('mprcurseApiKey')) {
         curseforge {
-            accessToken = project.securseApiKey
-            projectId = project.securseId
+            accessToken = project.mprcurseApiKey
+            projectId = project.mprcurseId
             javaVersions.add(JavaVersion.toVersion("${java_version}"))
             clientRequired = true
             serverRequired = true
             minecraftVersions.addAll("${release_versions}".split(','))
-            required('psi')
+            requires('psi')
         }
     }
     if (project.hasProperty('mprModrinthId')) {
@@ -187,7 +187,7 @@ publishMods {
             accessToken = project.modrinthKey
             projectId = project.seModrinthId
             minecraftVersions.addAll("${release_versions}".split(','))
-            required('psi')
+            requires('psi')
         }
     }
 }
