@@ -3,7 +3,7 @@
 ![Forge](https://img.shields.io/badge/Forge-40.0.+-green.svg?longCache=true&style=flat)
 ![Psi License](https://img.shields.io/badge/license-PSI-blue.svg?longCache=true&style=flat)
 
-**Magical Psi** replaces every asset and description of [Psi](https://www.curseforge.com/minecraft/mc-mods/psi) with a magic themed counterpart. This mod is required both client-side and server-side due to the recipe changes to ensure thematic consistency. This is a remake of the remake [Magical Psi Redux](https://www.curseforge.com/minecraft/mc-mods/magical-psi-redux) by TheIllusiveC4, distributed under the [Psi License](https://psi.vazkii.net/license.php).
+**Magical Psi** replaces every asset and description of [Psi](https://www.curseforge.com/minecraft/mc-mods/psi) with a magic-themed counterpart. This mod is required both client-side and server-side due to the recipe changes to ensure thematic consistency. This is a remake of the remake [Magical Psi Redux](https://www.curseforge.com/minecraft/mc-mods/magical-psi-redux) by TheIllusiveC4, distributed under the [Psi License](https://psi.vazkii.net/license.php).
 
 ## Features
 ### Blocks and Items
