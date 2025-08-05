@@ -7,7 +7,7 @@
 
 ## Features
 ### Blocks and Items
-![Blocks and Items](https://raw.githubusercontent.com/wendall911/MagicalPsiRevival/1.20.1/files/web/rods.webp)
+![Blocks and Items](https://raw.githubusercontent.com/wendall911/MagicalPsiRevival/1.20.1/files/web/items.webp)
 
 ### Focusing Rods
 ![Focusing Rods](https://raw.githubusercontent.com/wendall911/MagicalPsiRevival/1.20.1/files/web/rods.webp)
