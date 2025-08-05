@@ -7,13 +7,13 @@
 
 ## Features
 ### Blocks and Items
-![](https://i.ibb.co/LJnh2cv/magipsi-sprites.png)
+![Blocks and Items](https://raw.githubusercontent.com/wendall911/MagicalPsiRevival/1.20.1/files/web/rods.webp)
 
-### Focusing Rod
-![](https://i.ibb.co/jrNSMGM/magipsi-rod.png)
+### Focusing Rods
+![Focusing Rods](https://raw.githubusercontent.com/wendall911/MagicalPsiRevival/1.20.1/files/web/rods.webp)
 
 ### Focusing Plate Armor
-![](https://i.ibb.co/bJzpp5j/magipsi-armor.png)
+![Focusing Plate Armor](https://raw.githubusercontent.com/wendall911/MagicalPsiRevival/1.20.1/files/web/armor.webp)
 
 ## Credits
 * TheIllusiveC4 for keeping the original mod alive through 1.19.
