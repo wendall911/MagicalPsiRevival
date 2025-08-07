@@ -1,9 +1,7 @@
 plugins {
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'net.neoforged.moddev' version '0.1.110'
     id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '1.71.8'
     id 'me.modmuss50.mod-publish-plugin' version '0.7.3'
 }
@@ -37,79 +35,59 @@ repositories {
 
 group = 'com.github.wendall911.magicalpsirevival'
 version = "${minecraft_version}-${mod_version}"
-archivesBaseName = "${mod_name}"
-def mcversion = "${minecraft_version}"
-def modid = "${modid}"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '17'
+java.toolchain.languageVersion = JavaLanguageVersion.of(java_version)
 
-minecraft {
-    mappings channel: "${mappings_channel}", version: "${mappings_version}-${minecraft_version}"
+base {
+    archivesName = "${mod_name}"
+}
 
+neoForge {
+    version = neoforge_version
+    parchment {
+        minecraftVersion = parchment_mc_version
+        mappingsVersion = parchment_version
+    }
     runs {
+        configureEach {
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
+        }
         client {
-            workingDirectory project.file("run").canonicalPath
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                magicalpsirevival {
-                    source sourceSets.main
-                }
-            }
+            client()
         }
-
         server {
-            workingDirectory project.file('run')
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                magicalpsirevival {
-                    source sourceSets.main
-                }
-            }
+            server()
         }
-
         data {
-            workingDirectory project.file('run')
-            property 'forge.logging.console.level', 'debug'
-
-            args '--mod', "${modid}",
-                    '--all',
-                    '--output', file('src/generated/resources/'),
-                    '--existing', file('src/main/resources/'),
-                    '--existing', file('src/generated/resources')
-
-            mods {
-                magicalpsirevival {
-                    source sourceSets.main
-                }
-            }
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+            data()
         }
     }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+dependencies {
+    compileOnly "mezz.jei:jei-1.21.1-common-api:${jei_version}"
+    implementation "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
+
+    runtimeOnly ("mcjty.theoneprobe:theoneprobe:1.21_neo-${probe_version}") {
+        transitive = false
+    }
+
+    implementation "curse.maven:cyanide-541676:${cyanide_version}"
+    runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}-NEOFORGE"
+    //implementation "vazkii.psi:Psi:${psi_version}"
+
+    implementation fileTree(dir: 'libs', include: '*.jar')
 }
 
 sourceSets.main.resources {
     srcDir 'src/generated/resources'
-}
-
-dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
-    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
-
-    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
-
-    runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${minecraft_version}-${probe_version}") {
-        transitive = false
-    }
-
-    implementation fg.deobf("curse.maven:cyanide-541676:${cyanide_version}")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}-FORGE")
-    implementation fg.deobf("vazkii.psi:Psi:${psi_version}")
-}
-
-def commonManifest = {
-    attributes 'FMLAT': 'magicalpsirevival_at.cfg'
 }
 
 jar {
@@ -126,26 +104,32 @@ jar {
     }
 }
 
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
-def replaceProperties = [ 'version': version,
-    'issue_tracker': issue_tracker, 'license': license, 'modid': modid, 'display_name': display_name,
-    'description': description, 'display_url': display_url, 'update_url': update_url, 'authors': authors,
-    'credits': credits, 'logo_file': logo_file, 'minecraft_version_range': minecraft_version_range,
-    'forge_version_range': forge_version_range, "loader_version_range": loader_version_range
-]
+
 
 processResources {
-    duplicatesStrategy(DuplicatesStrategy.FAIL)
-    inputs.properties replaceProperties
+    def resourceTargets = ['META-INF/neoforge.mods.toml', 'pack.mcmeta', '*.mixins.json']
+    def expandProps = [
+        'version': version,
+        'issue_tracker': issue_tracker,
+        'license': license,
+        'mod_id': mod_id,
+        'display_name': display_name,
+        'description': description,
+        'display_url': display_url,
+        'update_url': update_url,
+        'authors': authors,
+        'credits': credits,
+        'logo_file': logo_file,
+        'neoforge_mc_version_range': neoforge_mc_version_range,
+        'neoforge_loader_version_range': neoforge_loader_version_range
+    ]
     exclude '.cache'
-    replaceProperties.put 'project', project
 
     filesMatching(resourceTargets) {
-        expand replaceProperties
+        expand expandProps
     }
+    inputs.properties(expandProps)
 }
-
-jar.finalizedBy('reobfJar', 'signJar')
 
 def updates = tasks.register("generateUpdates", Copy) {
     it.outputs.upToDateWhen {
@@ -169,7 +153,7 @@ publishMods {
         changelog = file(changelogFile).text
     }
     type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
-    modLoaders.addAll(['neoforge', 'forge'])
+    modLoaders.addAll(['neoforge'])
 
     if (project.hasProperty('mprcurseApiKey')) {
         curseforge {
@@ -200,23 +184,6 @@ task changelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
     fromRef = "${minecraft_version}-${last_mod_version}";
 }
 
+tasks.generateUpdates.mustRunAfter('jar')
+
 tasks.build.dependsOn('changelog', 'generateUpdates')
-
-// Jar Signing
-import net.minecraftforge.gradle.common.tasks.SignJar
-
-task signJar(type: SignJar, dependsOn: jar) {
-    dependsOn 'reobfJar'
-
-    // Skip the task if our secret data isn't available
-    onlyIf {
-        project.hasProperty('keyStore')
-    }
-
-    keyStore = project.keyStore // This needs to be a path to the keystore file
-    alias = project.keyStoreAlias
-    storePass = project.keyStorePass
-    keyPass = project.keyStoreKeyPass
-    inputFile = jar.archiveFile
-    outputFile = jar.archiveFile
-}

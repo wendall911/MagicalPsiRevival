@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "c:ingots/gold"
+    },
+    "W": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "pattern": [
+    "I  ",
+    "IWI",
+    "  I"
+  ],
+  "result": {
+    "count": 1,
+    "id": "psi:cad_assembly_gold"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "minecraft:logs"
+    },
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "tag": "psi:psidust"
+    },
+    [
+      {
+        "tag": "c:slimeballs"
+      },
+      {
+        "item": "minecraft:snowball"
+      }
+    ]
+  ],
+  "result": {
+    "count": 1,
+    "id": "psi:spell_bullet_circle"
+  }
+}

@@ -1,21 +1,22 @@
 package magicalpsirevival;
 
-import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.packs.PackLocationInfo;
+import net.minecraft.server.packs.PackResources;
+import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
+import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 
-import net.minecraftforge.event.AddPackFindersEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.forgespi.locating.IModFile;
-import net.minecraftforge.resource.PathPackResources;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforgespi.locating.IModFile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +27,7 @@ public class MagicalPsiRevival {
     public static final String MODID = "magipsi";
     public static final Logger LOGGER = LoggerFactory.getLogger(MagicalPsiRevival.MODID);
 
-    public MagicalPsiRevival() {
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
+    public MagicalPsiRevival(IEventBus eventBus) {
         eventBus.addListener(this::addPackFinders);
     }
 
@@ -41,31 +40,49 @@ public class MagicalPsiRevival {
     private void addPsiOverridesPack(final AddPackFindersEvent event) {
         IModFile modFile = ModList.get().getModFileById(MODID).getFile();
         Path path = modFile.findResource("psi_overrides");
-        PathPackResources pathResourcePack = new PathPackResources(modFile.getFileName() + ":" + path, true, path);
-        Pack.ResourcesSupplier resourcesSupplier = (string) -> pathResourcePack;
+        final PackLocationInfo packLocationInfo = new PackLocationInfo(
+            "builtin/psi_overrides",
+            Component.literal("Magical Psi Revival - Psi Overrides"),
+            PackSource.BUILT_IN,
+            Optional.empty()
+        );
+
+        final PackResources packResources = new PathPackResources(
+            packLocationInfo,
+            path
+        );
 
         LOGGER.info("Adding Psi Overrides Pack from {}", path.getFileName());
 
-        try {
-            PackMetadataSection packMetadataSection = pathResourcePack.getMetadataSection(PackMetadataSection.TYPE);
+        event.addRepositorySource(consumer -> {
+            Pack pack = Pack.readMetaAndCreate(
+                packLocationInfo,
+                new SinglePackResourceResourcesSupplier(packResources),
+                PackType.CLIENT_RESOURCES,
+                new PackSelectionConfig(true, Pack.Position.TOP, true)
+            );
 
-            if (packMetadataSection != null) {
-                event.addRepositorySource((consumer) -> consumer.accept(Pack.readMetaAndCreate(
-                    "builtin/psi_overrides",
-                    Component.literal("Magical Psi Revival - Psi Overrides"),
-                    true,
-                    resourcesSupplier,
-                    PackType.CLIENT_RESOURCES,
-                    Pack.Position.TOP,
-                    PackSource.BUILT_IN
-                )));
-            } else {
-                LOGGER.error("No valid pack metadata found for {}", path.getFileName());
+            if (pack != null) {
+                consumer.accept(pack);
             }
+            else {
+                LOGGER.error("Failed to create pack for Psi Overrides from {}", path.getFileName());
+            }
+        });
+    }
+
+    private record SinglePackResourceResourcesSupplier(PackResources packResources) implements Pack.ResourcesSupplier {
+
+        @Override
+        public PackResources openPrimary(PackLocationInfo location) {
+            return packResources();
         }
-        catch (IOException e) {
-            LOGGER.error("Failed to load pack metadata for {}", path.getFileName(), e);
+
+        @Override
+        public PackResources openFull(PackLocationInfo location, Pack.Metadata metadata) {
+            return packResources();
         }
+
     }
 
 }

@@ -1,12 +1,16 @@
 package magicalpsirevival.data.recipes;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
-import net.minecraft.advancements.CriterionTriggerInstance;
+import org.jetbrains.annotations.NotNull;
+
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
@@ -16,7 +20,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import vazkii.psi.common.Psi;
 import vazkii.psi.common.block.base.ModBlocks;
@@ -25,19 +29,19 @@ import vazkii.psi.common.lib.ModTags;
 
 public class ModRecipesProvider extends RecipeProvider {
 
-    public ModRecipesProvider(PackOutput packOutput) {
-        super(packOutput);
+    public ModRecipesProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> provider) {
+        super(packOutput, provider);
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
-        CriterionTriggerInstance hasGold = has(Tags.Items.INGOTS_GOLD);
-        CriterionTriggerInstance hasIron = has(Tags.Items.INGOTS_IRON);
-        CriterionTriggerInstance hasPsigem = has(ModTags.GEM_PSIGEM);
-		CriterionTriggerInstance hasPsimetal = has(ModTags.INGOT_PSIMETAL);
-		CriterionTriggerInstance hasEbonyPsimetal = has(ModTags.INGOT_EBONY_PSIMETAL);
-		CriterionTriggerInstance hasIvoryPsimetal = has(ModTags.INGOT_IVORY_PSIMETAL);
-		CriterionTriggerInstance hasPsidust = has(ModTags.PSIDUST);
+    public void buildRecipes(@NotNull RecipeOutput consumer) {
+        Criterion<InventoryChangeTrigger.TriggerInstance> hasGold = has(Tags.Items.INGOTS_GOLD);
+        Criterion<InventoryChangeTrigger.TriggerInstance> hasIron = has(Tags.Items.INGOTS_IRON);
+        Criterion<InventoryChangeTrigger.TriggerInstance> hasPsigem = has(ModTags.GEM_PSIGEM);
+        Criterion<InventoryChangeTrigger.TriggerInstance> hasPsimetal = has(ModTags.INGOT_PSIMETAL);
+        Criterion<InventoryChangeTrigger.TriggerInstance> hasEbonyPsimetal = has(ModTags.INGOT_EBONY_PSIMETAL);
+        Criterion<InventoryChangeTrigger.TriggerInstance> hasIvoryPsimetal = has(ModTags.INGOT_IVORY_PSIMETAL);
+        Criterion<InventoryChangeTrigger.TriggerInstance> hasPsidust = has(ModTags.PSIDUST);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.cadAssembler)
             .define('G', Tags.Items.INGOTS_GOLD)
@@ -241,7 +245,7 @@ public class ModRecipesProvider extends RecipeProvider {
             .requires(ItemTags.LOGS)
             .requires(Items.PAPER)
             .requires(ModTags.PSIDUST)
-            .requires(Tags.Items.STRING)
+            .requires(Tags.Items.STRINGS)
             .unlockedBy("has_psidust", hasPsidust)
             .save(consumer, Psi.location("spell_bullet_loopcast"));
 
@@ -251,7 +255,7 @@ public class ModRecipesProvider extends RecipeProvider {
             .requires(ModTags.PSIDUST).requires(
                 Ingredient.fromValues(
                     Stream.of(
-                        new Ingredient.TagValue(Tags.Items.SLIMEBALLS),
+                        new Ingredient.TagValue(Tags.Items.SLIME_BALLS),
                         new Ingredient.ItemValue(new ItemStack(Items.SNOWBALL))
                     )
                 )
@@ -263,7 +267,7 @@ public class ModRecipesProvider extends RecipeProvider {
             .requires(ItemTags.LOGS)
             .requires(Items.PAPER)
             .requires(ModTags.PSIDUST)
-            .requires(Tags.Items.GUNPOWDER)
+            .requires(Tags.Items.GUNPOWDERS)
             .unlockedBy("has_psidust", hasPsidust)
             .save(consumer, Psi.location("spell_bullet_grenade"));
 
@@ -347,7 +351,7 @@ public class ModRecipesProvider extends RecipeProvider {
             .define('W', ItemTags.LOGS)
             .define('P', Items.PAPER)
             .define('R', Tags.Items.DUSTS_REDSTONE)
-            .define('G', Tags.Items.GLASS_COLORLESS)
+            .define('G', Tags.Items.GLASS_BLOCKS)
             .define('I', ModTags.INGOT_PSIMETAL).pattern("WRW")
             .pattern("PGP")
             .pattern("WIW")
@@ -407,7 +411,7 @@ public class ModRecipesProvider extends RecipeProvider {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.exosuitSensorTrigger)
             .define('I', ModTags.INGOT_PSIMETAL)
             .define('R', Tags.Items.INGOTS_GOLD)
-            .define('M', Tags.Items.GUNPOWDER)
+            .define('M', Tags.Items.GUNPOWDERS)
             .pattern(" I ")
             .pattern("IMR")
             .pattern(" R ")

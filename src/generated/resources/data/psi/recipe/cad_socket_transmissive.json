@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "tag": "c:dusts/redstone"
+    },
+    "G": {
+      "tag": "c:gems/psigem"
+    },
+    "I": {
+      "tag": "c:ingots/psimetal"
+    },
+    "W": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "pattern": [
+    "DIW",
+    "IG ",
+    "W  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "psi:cad_socket_transmissive"
+  }
+}
