@@ -12,7 +12,7 @@ license="${license}"
   updateJSONURL="${update_url}"
   authors="${authors}"
   credits="${credits}"
-  itemIcon="psi:needs_item"
+  itemIcon="psi:psidust"
   logoFile="${logo_file}"
 
 [[dependencies.magicalpsirevival]]
