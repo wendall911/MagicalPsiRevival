@@ -169,7 +169,7 @@ publishMods {
     if (project.hasProperty('mprModrinthId')) {
         modrinth {
             accessToken = project.modrinthKey
-            projectId = project.seModrinthId
+            projectId = project.mprModrinthId
             minecraftVersions.addAll("${release_versions}".split(','))
             requires('psi')
         }
