@@ -19,7 +19,7 @@ issueTrackerURL="${issue_tracker}"
     type="required"
     versionRange="${neoforge_loader_version_range}"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"
 [[dependencies.${mod_id}]]
     modId="minecraft"
     type="required"
