@@ -2,12 +2,12 @@ package magicalpsirevival.client;
 
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 import vazkii.psi.api.spell.SpellParam;
 import vazkii.psi.client.model.ModModelLayers;
@@ -16,7 +16,7 @@ import vazkii.psi.common.item.ItemExosuitSensor;
 import magicalpsirevival.MagicalPsiRevival;
 
 @SuppressWarnings("unused")
-@Mod.EventBusSubscriber(modid = MagicalPsiRevival.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = MagicalPsiRevival.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class MagicalPsiRevivalClient {
 
     @SubscribeEvent
@@ -43,5 +43,6 @@ public class MagicalPsiRevivalClient {
         evt.registerLayerDefinition(ModModelLayers.PSIMETAL_EXOSUIT_OUTER_ARMOR,
             () -> LayerDefinition.create(FocusingPlateModel.createOutsideMesh(), 64, 128));
     }
+
 }
 
