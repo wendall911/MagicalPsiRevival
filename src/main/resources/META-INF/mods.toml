@@ -20,7 +20,7 @@ license="${license}"
     mandatory=true
     versionRange="${forge_version_range}"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"
 [[dependencies.magicalpsirevival]]
     modId="minecraft"
     mandatory=true
