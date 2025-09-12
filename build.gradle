@@ -165,6 +165,8 @@ def updates = tasks.register("generateUpdates", Copy) {
     it.into 'files/'
 }
 
+tasks.build.dependsOn('changelog', 'generateUpdates')
+
 def changelogFile = project(":").projectDir.toString() + '/build/libs/changelog.txt'
 def publishFile = project(":").projectDir.toString() + "/build/libs/${archivesBaseName}-${version}.jar"
 
