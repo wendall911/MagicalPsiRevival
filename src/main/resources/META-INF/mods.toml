@@ -1,20 +1,20 @@
 modLoader="javafml"
-loaderVersion="${loader_version_range}"
-issueTrackerURL="${issue_tracker}"
+loaderVersion="${forge_version_range}"
 license="${license}"
+logoBlur=false
+issueTrackerURL="${issue_tracker}"
 
 [[mods]]
-  modId="${modid}"
-  displayName="${display_name}"
-  description="${description}"
-  version="${version}"
-  displayURL="${display_url}"
-  updateJSONURL="${update_url}"
-  authors="${authors}"
-  credits="${credits}"
-  itemIcon="psi:psidust"
-  logoFile="${logo_file}"
-
+    modId="${modid}"
+    displayName="${display_name}"
+    description="${description}"
+    version="${version}"
+    displayURL="${display_url}"
+    updateJSONURL="https://raw.githubusercontent.com/wendall911/MagicalPsiRevival/${mod_update_branch}/files/updates.json"
+    authors="${authors}"
+    credits="${credits}"
+    itemIcon="psi:psidust"
+    logoFile="${logo_file}"
 [[dependencies.magicalpsirevival]]
     modId="forge"
     mandatory=true
@@ -24,7 +24,7 @@ license="${license}"
 [[dependencies.magicalpsirevival]]
     modId="minecraft"
     mandatory=true
-    versionRange="${minecraft_version_range}"
+    versionRange="${forge_mc_version_range}"
     ordering="NONE"
     side="BOTH"
 [[dependencies.magicalpsirevival]]
