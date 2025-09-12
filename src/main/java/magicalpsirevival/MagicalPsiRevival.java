@@ -26,6 +26,7 @@ public class MagicalPsiRevival {
     public static final String MODID = "magipsi";
     public static final Logger LOGGER = LoggerFactory.getLogger(MagicalPsiRevival.MODID);
 
+    @SuppressWarnings("removal")
     public MagicalPsiRevival() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
