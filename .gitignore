@@ -3,4 +3,8 @@ build
 .gradle
 libs
 run
+runs
+
+# IntelliJ
 .idea
+*.iml
