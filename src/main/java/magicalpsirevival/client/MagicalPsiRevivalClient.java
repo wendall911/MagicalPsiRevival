@@ -16,7 +16,7 @@ import vazkii.psi.common.item.ItemExosuitSensor;
 import magicalpsirevival.MagicalPsiRevival;
 
 @SuppressWarnings("unused")
-@EventBusSubscriber(modid = MagicalPsiRevival.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = MagicalPsiRevival.MODID, value = Dist.CLIENT)
 public class MagicalPsiRevivalClient {
 
     @SubscribeEvent
@@ -45,4 +45,3 @@ public class MagicalPsiRevivalClient {
     }
 
 }
-
