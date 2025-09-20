@@ -1,6 +1,6 @@
-# Magical Psi: Revival[![Project](http://cf.way2muchnoise.eu/full_1320084_downloads.svg)](https://minecraft.curseforge.com/projects/1320084)
-![Minecraft](http://cf.way2muchnoise.eu/versions/For%20MC_1320084_all.svg)
-![Forge](https://img.shields.io/badge/Forge-40.0.+-green.svg?longCache=true&style=flat)
+# Magical Psi: Revival[![Project](http://cf.way2muchnoise.eu/full_1320084_downloads.svg)](https://minecraft.curseforge.com/projects/1320084) [![Project](https://modrinth.roughness.technology/full_magical-psi-revival_downloads.svg)](https://modrinth.com/mod/magical-psi-revival)
+[![](https://modrinth.roughness.technology/versions/magical-psi-revival.svg)](https://modrinth.com/mod/magical-psi-revival/versions)
+[![](https://img.shields.io/badge/NeoForge-20.4+-orange.svg?longCache=true&style=flat)](https://www.curseforge.com/minecraft/mc-mods/magical-psi-revival/files?gameVersionTypeId=6)
 ![Psi License](https://img.shields.io/badge/license-PSI-blue.svg?longCache=true&style=flat)
 
 **Magical Psi** replaces every asset and description of [Psi](https://www.curseforge.com/minecraft/mc-mods/psi) with a magic-themed counterpart. This mod is required both client-side and server-side due to the recipe changes to ensure thematic consistency. However, this mod can also be used client-side only if needed. This is a remake of the remake [Magical Psi Redux](https://www.curseforge.com/minecraft/mc-mods/magical-psi-redux) by TheIllusiveC4, distributed under the [Psi License](https://psi.vazkii.net/license.php).
