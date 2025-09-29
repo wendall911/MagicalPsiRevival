@@ -12,13 +12,15 @@ plugins {
 repositories {
     maven {
         // location of the maven that hosts Mantle and JEI files
-        name = 'Progwml6 maven'
-        url = 'https://dvs1.progwml6.com/files/maven'
+        name = 'Old JEI, Tinkers and Mantle'
+        url 'https://dvs1.progwml6.com/files/maven/'
     }
+
     maven { // TOP
         name 'McJty maven'
         url "https://maven.k-4u.nl"
     }
+
     maven {
         name = 'Curse Maven'
         url = 'https://cursemaven.com'
@@ -26,10 +28,11 @@ repositories {
             includeGroup 'curse.maven'
         }
     }
+
     maven {
         // Patchouli && Provider
-        name = "Blame Jared"
-        url = "https://maven.blamejared.com"
+        name = 'BlameJared Maven (CrT / Bookshelf / JEI (Newer) / vazkii / xyz)'
+        url = 'https://maven.blamejared.com'
     }
 }
 
@@ -45,7 +48,7 @@ minecraft {
 
     runs {
         client {
-            workingDirectory project.file("run").canonicalPath
+            workingDirectory project.file('run')
             property 'forge.logging.console.level', 'debug'
             mods {
                 magicalpsirevival {
@@ -53,7 +56,6 @@ minecraft {
                 }
             }
         }
-
         server {
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'debug'
@@ -63,10 +65,10 @@ minecraft {
                 }
             }
         }
-
         data {
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'debug'
+            ideaModule "${rootProject.name}.${project.name}.main"
             args '--mod', "${mod_id}",
                     '--all',
                     '--output', file('src/generated/resources/'),
@@ -82,15 +84,13 @@ minecraft {
     }
 }
 
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-}
+sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
     runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${minecraft_version}-${probe_version}") {
@@ -122,17 +122,27 @@ jar {
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
 def replaceProperties = [
-    'version': actualVersion, 'forge_mc_version_range': forge_mc_version_range, 'forge_version_range': forge_version_range,
-    'license': license, 'mod_id': mod_id, 'mod_author': mod_author, 'mod_description': mod_description,
-    'mod_name': mod_name, 'issue_tracker': issue_tracker, 'mod_credits': mod_credits,
-    'mod_update_branch': mod_update_branch
+    'version': actualVersion,
+    'minecraft_version': minecraft_version,
+    'forge_mc_version_range': forge_mc_version_range,
+    'forge_version_range': forge_version_range,
+    'license': license,
+    'mod_id': mod_id,
+    'mod_author': mod_author,
+    'mod_description': mod_description,
+    'mod_display_name': mod_display_name,
+    'mod_name': mod_name,
+    'mod_credits': mod_credits,
+    'mod_update_branch': mod_update_branch,
+    'pack_format': pack_format,
+    'curseforge_slug': curseforge_slug
 ]
 
 processResources {
     duplicatesStrategy(DuplicatesStrategy.FAIL)
     inputs.properties replaceProperties
-    exclude '.cache'
     replaceProperties.put 'project', project
+    exclude '.cache'
 
     filesMatching(resourceTargets) {
         expand replaceProperties
@@ -155,7 +165,7 @@ def updates = tasks.register("generateUpdates", Copy) {
 
     it.from("./files/templates/") {
         include 'updates.json'
-        expand 'version': actualVersion, 'minecraft_version': minecraft_version
+        expand replaceProperties
     }
 
     it.into 'files/'
@@ -175,23 +185,52 @@ publishMods {
     modLoaders.addAll(['neoforge', 'forge'])
     dryRun = providers.environmentVariable('DO_RELEASE').getOrNull() == null
 
-    if (project.hasProperty('mprcurseApiKey')) {
+    if (project.hasProperty("${curseforge_api_key_prop}")) {
         curseforge {
-            accessToken = project.mprcurseApiKey
-            projectId = project.mprcurseId
+            accessToken = project.property("${curseforge_api_key_prop}")
+            projectId = "${curseforge_id}"
+            projectSlug = "${curseforge_slug}"
             javaVersions.add(JavaVersion.toVersion("${java_version}"))
             clientRequired = true
             serverRequired = true
             minecraftVersions.addAll("${release_versions}".split(','))
             requires('psi')
+            optional('actually-harvest')
+            optional('betterdays')
+            optional('charged-charms')
+            optional('creeper-fireworks')
+            optional('homeostatic')
+            optional('simpletextoverlay')
+            optional('ready-player-fun')
+            optional('survivalist-essentials')
+            optional('tinkersurvival')
         }
     }
-    if (project.hasProperty('mprModrinthId')) {
+    if (project.hasProperty("${modrinth_api_key_prop}")) {
         modrinth {
-            accessToken = project.modrinthKey
-            projectId = project.mprModrinthId
+            accessToken = project.property("${modrinth_api_key_prop}")
+            projectId = "${modrinth_id}"
             minecraftVersions.addAll("${release_versions}".split(','))
             requires('psi')
+            optional('actually-harvest')
+            optional('betterdays')
+            optional('charged-charms')
+            optional('creeper-fireworks-mod')
+            optional('homeostatic')
+            optional('simpletextoverlay')
+            optional('ready-player-fun')
+            optional('survivalist-essentials')
+            optional('tinkersurvival')
+        }
+    }
+    if (project.hasProperty("${discord_webhook_prop}")) {
+        discord {
+            webhookUrl = project.property("${discord_webhook_prop}")
+            dryRunWebhookUrl = project.property("${discord_dryrun_webhook_prop}")
+            username = "${mod_author}"
+            content = changelog.map {
+                "# A new version of ${mod_display_name} for Forge ${minecraft_version} has been released! \n" + it
+            }
         }
     }
 }
