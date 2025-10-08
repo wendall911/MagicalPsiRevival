@@ -76,8 +76,8 @@ neoForge {
 }
 
 dependencies {
-    compileOnly "mezz.jei:jei-1.21.1-common-api:${jei_version}"
-    implementation "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    implementation "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     runtimeOnly ("mcjty.theoneprobe:theoneprobe:1.21_neo-${probe_version}") {
         transitive = false
@@ -85,9 +85,7 @@ dependencies {
 
     implementation "curse.maven:cyanide-541676:${cyanide_version}"
     runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}-NEOFORGE"
-    //implementation "vazkii.psi:Psi:${psi_version}"
-
-    implementation fileTree(dir: 'libs', include: '*.jar')
+    implementation "vazkii.psi:psi:${psi_version}"
 }
 
 sourceSets.main.resources {
@@ -133,6 +131,9 @@ processResources {
         expand expandProps
     }
     inputs.properties(expandProps)
+    outputs.upToDateWhen {
+        false
+    }
 }
 
 task changelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
