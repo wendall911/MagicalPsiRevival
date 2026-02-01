@@ -85,7 +85,7 @@ dependencies {
 
     implementation "curse.maven:cyanide-541676:${cyanide_version}"
     runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}-NEOFORGE"
-    implementation "vazkii.psi:psi:${psi_version}"
+    implementation "vazkii.psi:psi:${minecraft_version}-${psi_version}"
 }
 
 sourceSets.main.resources {
