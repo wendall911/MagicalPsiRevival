@@ -1,4 +1,4 @@
-// 1.21.1	2025-08-07T08:40:29.740751016	Recipes
+// 1.21.1	2026-02-01T08:14:18.754412645	Recipes
 3a858eefb9023289139668315f82db826687ce85 data/psi/advancement/recipes/misc/assembler.json
 0c2dfe93af80a542a9394304eb8eb7d3c696e8fe data/psi/advancement/recipes/misc/cad_assembly_ebony.json
 e16d1744c2269dde5c09a660b78a2126e088208e data/psi/advancement/recipes/misc/cad_assembly_gold.json
@@ -72,7 +72,7 @@ e5725694be4a730e7a6584388e2fb42b3a6fff85 data/psi/recipe/psimetal_axe.json
 ab7c786c29f54e55b5d10cc7af8327b94e414666 data/psi/recipe/psimetal_sword.json
 809793ffafe47aa2db0b9aa15552d620a0e6185c data/psi/recipe/spell_bullet_basic.json
 d53d0247cfd2976f1417f6dea6840da1bc215af8 data/psi/recipe/spell_bullet_charge.json
-b8f9a29b09762d65d9113364c243c4e2eb9b1cb1 data/psi/recipe/spell_bullet_circle.json
+aa9de71a2a66439857fe01677678d55fd12f52d9 data/psi/recipe/spell_bullet_circle.json
 c41afa980abdd4a61547a757e196d63976bac453 data/psi/recipe/spell_bullet_grenade.json
 9978aed711c0945d8816b0a5c762457beaf22449 data/psi/recipe/spell_bullet_loopcast.json
 3a635d529b3e70fd1fb773c419dd2571618c3ad1 data/psi/recipe/spell_bullet_mine.json
