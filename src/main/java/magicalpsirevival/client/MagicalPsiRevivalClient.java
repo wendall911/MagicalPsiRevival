@@ -21,6 +21,8 @@ public class MagicalPsiRevivalClient {
 
     @SubscribeEvent
     public static void clientSetup(final FMLClientSetupEvent evt) {
+        /*
+         * Moved to mixins since someone decided to make those fields final. :(
         SpellParam.RED = 0xFF003F;
         SpellParam.GREEN = 0x3FFF00;
         SpellParam.BLUE = 0x007FFF;
@@ -34,6 +36,7 @@ public class MagicalPsiRevivalClient {
         ItemExosuitSensor.lightColor = 0xFFDF00;
         ItemExosuitSensor.lowHealthColor = 0x7FFF00;
         ItemExosuitSensor.underwaterColor = 0x003FFF;
+         */
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
