@@ -22,12 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Mod(MagicalPsiRevival.MODID)
-public class MagicalPsiRevival {
+public class MagicalPsiRevivalNeoForge {
 
     public static final String MODID = "magipsi";
     public static final Logger LOGGER = LoggerFactory.getLogger(MagicalPsiRevival.MODID);
 
-    public MagicalPsiRevival(IEventBus eventBus) {
+    public MagicalPsiRevivalNeoForge(IEventBus eventBus) {
         eventBus.addListener(this::addPackFinders);
     }
 

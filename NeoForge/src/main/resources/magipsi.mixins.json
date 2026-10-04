@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8.4",
+  "package": "magicalpsirevival.mixin",
+  "refmap": "magipsi-refmap.json",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ItemExosuitSensorMixin",
+    "SpellParamMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

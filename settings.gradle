@@ -5,32 +5,33 @@ pluginManagement {
         exclusiveContent {
             forRepository {
                 maven {
-                    name = 'NeoForge'
-                    url = uri("https://maven.neoforged.net/releases")
+                    name = 'Fabric'
+                    url = uri("https://maven.fabricmc.net")
                 }
             }
             filter {
-                includeGroupAndSubgroups("net.neoforged")
-                includeGroup("codechicken")
+                includeGroupAndSubgroups('net.fabricmc')
+                includeGroup('fabric-loom')
             }
         }
         exclusiveContent {
             forRepository {
                 maven {
-                    name = 'Sponge Snapshots'
-                    url = uri("https://repo.spongepowered.org/repository/maven-public")
+                    name = 'NeoForge'
+                    url = 'https://maven.neoforged.net/releases'
                 }
             }
             filter {
-                includeGroupAndSubgroups("org.spongepowered")
-                includeGroup("net.minecraftforge")
+                includeGroupAndSubgroups('net.neoforged')
+                includeGroup('codechicken')
             }
         }
     }
 }
 
 plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.10.0'
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
 
 rootProject.name = "${mod_name}"
+include("Common", "Fabric", "NeoForge")

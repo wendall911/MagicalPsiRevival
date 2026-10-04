@@ -1,0 +1,162 @@
+plugins {
+    id 'multiloader-loader'
+    id 'fabric-loom'
+}
+
+def identifier = "${mod_id}-${minecraft_version}-fabric"
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings(loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${minecraft_version}:${mappings_version}@zip")
+    })
+
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+    modImplementation "curse.maven:psi-241665:${psi_fabric_version}"
+    modLocalRuntime "vazkii.patchouli:Patchouli:${patchouli_version}-FABRIC"
+
+    modLocalRuntime "dev.architectury:architectury-fabric:${architectury_version}"
+    modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+
+    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+    modLocalRuntime group: 'com.terraformersmc', name: 'modmenu', version: "${mod_menu_version}"
+
+    // Testing Mods
+    //modLocalRuntime "curse.maven:mod-XXX:XXX"
+}
+
+loom {
+    def aw = project(":Common").file("src/main/resources/${mod_id}.accesswidener")
+    if (aw.exists()) {
+        accessWidenerPath.set(aw)
+    }
+    mixin {
+        defaultRefmapName.set("${mod_id}.refmap.json")
+    }
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        commonDatagen {
+            client()
+            vmArg "-D${mod_id}.common_datagen=1"
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.modid=${mod_id}"
+            vmArg "-Dfabric-api.datagen.output-dir=${file("../Common/src/generated/resources")}"
+        }
+        fabricDatagen {
+            client()
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.modid=${mod_id}"
+            vmArg "-Dfabric-api.datagen.output-dir=${file("src/generated/resources")}"
+        }
+    }
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+
+processResources {
+    /*
+     * This is for things that have dedicated NeoForge datagen like
+     * Patchouli that need data copied over.
+    */
+    from ('../NeoForge/src/generated/resources/') {
+        exclude '**/recipe/*'
+        exclude '**/recipes/*'
+    }
+}
+
+def changelogFile = project(":").projectDir.toString() + '/build/libs/changelog.txt'
+def publishFile = project(":").projectDir.toString() + "/Fabric/build/libs/${identifier}-${version}.jar"
+def display_name = "${project.name} ${minecraft_version}-${version}"
+def display_version = "${minecraft_version}-${version}"
+
+publishMods {
+    file = file(publishFile)
+    if (file(changelogFile).exists()) {
+        changelog = file(changelogFile).text
+    }
+    displayName = "${display_name}"
+    version = "${display_version}"
+    type = "${release_type}".startsWith("release") ? STABLE : ("${release_type}".startsWith("beta") ? BETA : ALPHA)
+    modLoaders.add('fabric')
+    dryRun = providers.environmentVariable('DO_RELEASE').getOrNull() == null
+
+    if (project.hasProperty("${curseforge_api_key_prop}")) {
+        curseforge {
+            accessToken = project.property("${curseforge_api_key_prop}")
+            projectId = "${curseforge_id}"
+            projectSlug = "${curseforge_slug}"
+            javaVersions.add(JavaVersion.toVersion("${java_version}"))
+            clientRequired = true
+            serverRequired = true
+            minecraftVersions.addAll("${release_versions}".split(','))
+            requires('fabric-api')
+            optional('actually-harvest')
+            optional('betterdays')
+            optional('charged-charms')
+            optional('creeper-fireworks')
+            optional('homeostatic')
+            optional('homeostatic-seasons')
+            optional('mobchampions')
+            optional('simpletextoverlay')
+            optional('survivalist-essentials')
+            optional('ready-player-fun')
+        }
+    }
+    if (project.hasProperty("${modrinth_api_key_prop}")) {
+        modrinth {
+            accessToken = project.property("${modrinth_api_key_prop}")
+            projectId = "${modrinth_id}"
+            minecraftVersions.addAll("${release_versions}".split(','))
+            requires('fabric-api')
+            optional('actually-harvest')
+            optional('betterdays')
+            optional('charged-charms')
+            optional('creeper-fireworks-mod')
+            optional('homeostatic')
+            optional('homeostatic-seasons')
+            optional('mobchampions')
+            optional('simpletextoverlay')
+            optional('survivalist-essentials')
+            optional('ready-player-fun')
+        }
+    }
+    if (project.hasProperty("${discord_webhook_prop}")) {
+        discord {
+            webhookUrl = project.property("${discord_webhook_prop}")
+            dryRunWebhookUrl = project.property("${discord_dryrun_webhook_prop}")
+            username = "${mod_author}"
+            content = changelog.map {
+                "# A new version of ${mod_display_name} for Fabric ${minecraft_version} has been released! \n" + it
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId identifier
+            version project.version
+            from components.java
+        }
+    }
+}
