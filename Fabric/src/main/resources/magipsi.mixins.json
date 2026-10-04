@@ -6,9 +6,12 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "ItemExosuitSensorMixin",
+    "ModelPsimetalExosuitMixin",
     "SpellParamMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+  ]
 }

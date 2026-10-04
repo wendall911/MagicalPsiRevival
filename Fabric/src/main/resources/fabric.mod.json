@@ -16,7 +16,7 @@
     "sources": "https://github.com/${mod_author}/${mod_name}"
   },
   "license": "${license}",
-  "icon": "${mod_id}_icon.png",
+  "icon": "magicalpsirevival_icon.png",
   "environment": "*",
   "accessWidener": "${mod_id}.accesswidener",
   "entrypoints": {

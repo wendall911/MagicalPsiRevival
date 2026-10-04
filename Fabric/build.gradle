@@ -5,12 +5,53 @@ plugins {
 
 def identifier = "${mod_id}-${minecraft_version}-fabric"
 
+def compileDummyJar = tasks.register('compileDummyOverrideJar', Jar) {
+    archiveBaseName = 'zzzzzzzfuckfabric'
+    archiveVersion = '1.0.0'
+
+    // Set the destination directory to a temporary build folder
+    destinationDirectory = layout.buildDirectory.dir("tmp/dummy_jar")
+
+    /*
+     * Inject the necessary fabric.mod.json configuration directly into the root of this JAR
+     * Fabric refuses to allow proper datapack overrides and forces alphabetical ordering of mods
+     * based on the mod ID, so we create a dummy mod with a name that will always be loaded first
+     * to ensure our overrides are applied correctly.
+     *
+     * Maybe someday they will grow the fuck up and quit refusing basic functionality like this,
+     * but until then, this is the only way to make it work.
+     */
+    def generatedModJson = file("${layout.buildDirectory.get()}/tmp/dummy_metadata/fabric.mod.json")
+    doFirst {
+        generatedModJson.parentFile.mkdirs()
+        generatedModJson.text = """{
+            "schemaVersion": 1,
+            "id": "zzzzzzzfuckfabric",
+            "version": "1.0.0",
+            "name": "Psi Overrides Priority Loader",
+            "icon": "logo.png",
+            "environment": "*"
+        }"""
+    }
+
+    from(generatedModJson)
+
+    // Pull the single copy of data files directly from your shared resources folder
+    from("../Common/src/main/resources/psi_overrides") {
+        include "assets/**"
+        include "logo.png"
+        include "pack.mcmeta"
+    }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings(loom.layered {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${minecraft_version}:${mappings_version}@zip")
     })
+
+    runtimeOnly(files(compileDummyJar.map { it.archiveFile }))
 
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
@@ -67,19 +108,10 @@ loom {
     }
 }
 
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-}
-
-processResources {
-    /*
-     * This is for things that have dedicated NeoForge datagen like
-     * Patchouli that need data copied over.
-    */
-    from ('../NeoForge/src/generated/resources/') {
-        exclude '**/recipe/*'
-        exclude '**/recipes/*'
-    }
+remapJar {
+    nestedJars.from(compileDummyJar.map {
+        it.archiveFile
+    })
 }
 
 def changelogFile = project(":").projectDir.toString() + '/build/libs/changelog.txt'
